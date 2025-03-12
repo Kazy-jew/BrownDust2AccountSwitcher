@@ -11,7 +11,11 @@ set acc="%root%B%const%.reg"
 set config="%root%last.txt"
 set log="%root%log.log"
 
-
+if not exist "%root%" (
+	echo directory %root% not found, existing...
+	set ERROR_FLAG=1
+    exit /b !errorlevel!
+)
 echo [%date% %time%] - Purging log file... > %log% 2>&1
 REM config file handle
 echo [%date% %time%] - checking config file...>> %log% 2>&1
@@ -33,7 +37,7 @@ if "%value%" == "%const%" (
 
 
 :startProgram
-if !ERROR_FLAG! EQU 0 (
+if !errorlevel! EQU 0 if !ERROR_FLAG! EQU 0 (
 	echo [%date% %time%] - Start program... >> %log% 2>&1
 	C:\ProgramData\Neowiz\Browndust2Starter\Browndust2Starter.exe browndust2:games/10000001?usn=0
 	echo [%date% %time%] - Program started >> %log% 2>&1
