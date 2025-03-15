@@ -18,27 +18,29 @@ if not exist "%root%" (
 	pause
     exit /b -1
 )
+
 echo [%date% %time%] - Purging log file... > %log% 2>&1
+
 REM config file handle
-echo [%date% %time%] - checking config file...>> %log% 2>&1
+echo [%date% %time%] - Checking config file...>> %log% 2>&1
 if not exist "%config%" (
 	echo %const% > "%config%"
 	echo [%date% %time%] - Config file not found, create with default value %const% >> %log% 2>&1
 )
 for /f %%a in ('type %config%') do set value=%%a
-echo [%date% %time%] - the config value is: !value!, the const is %const% >> %log% 2>&1
+echo [%date% %time%] - Config value is: !value!, launcher account is %const% >> %log% 2>&1
 
-
+REM main
 if "%value%" == "%const%" (
-	echo [%date% %time%] - the registry account is current, try to start program direcly... >> %log% 2>&1
-	goto :startProgram
+	echo [%date% %time%] - Registry account is current, try to start program directly... >> %log% 2>&1
 ) else (
 	call :exportREG !value!
-	goto :startProgram
 )
+goto :startProgram
 
 
 :startProgram
+REM start the Browdust2Starter
 if !errorlevel! EQU 0 if !ERROR_FLAG! EQU 0 (
 	echo [%date% %time%] - Start program... >> %log% 2>&1
 	C:\ProgramData\Neowiz\Browndust2Starter\Browndust2Starter.exe browndust2:games/10000001?usn=0
@@ -50,12 +52,11 @@ if !errorlevel! EQU 0 if !ERROR_FLAG! EQU 0 (
 echo. >> %log% 2>&1
 goto :eof
 
-
 :exportREG
 REM backup account in registry
-echo [%date% %time%] - the registry account is B%1, switch to B%const%...  >> %log% 2>&1
+echo [%date% %time%] - Registry account is B%1, switch to B%const%...  >> %log% 2>&1
 set regFile="%root%B%1.reg"
-echo [%date% %time%] - the registry will be export as: !regFile!  >> %log% 2>&1
+echo [%date% %time%] - Registry will be export as: !regFile!  >> %log% 2>&1
 if exist !regFile! (
 	echo [%date% %time%] - regFile !regFile! already exists, deleting... >> %log% 2>&1
 	del /f !regFile! >> %log% 2>&1
