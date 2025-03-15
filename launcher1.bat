@@ -12,9 +12,11 @@ set config="%root%last.txt"
 set log="%root%log.log"
 
 if not exist "%root%" (
-	echo directory %root% not found, existing...
+	echo Directory not found: %root%
 	set ERROR_FLAG=1
-    exit /b !errorlevel!
+	echo.
+	pause
+    exit /b -1
 )
 echo [%date% %time%] - Purging log file... > %log% 2>&1
 REM config file handle
